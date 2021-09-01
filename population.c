@@ -23,13 +23,12 @@ int main(void)
     int populationSize = startSize;
     int years = 0;
 
-    do
+    while (populationSize < endSize)
     {
         populationSize += (populationSize / 3) - (populationSize / 4);
         years++;
     }
-    while (populationSize < endSize);
 
     // Print number of years
-    printf("Years: %i\n", years);
+    printf("Years: %i", years);
 }
