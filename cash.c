@@ -22,7 +22,7 @@ int main(void)
     int coins = 0;
     int coinsUsed = 0;
 
-    while(changeRemaining > 0)
+    while (changeRemaining > 0)
     {
         // Check if quarters can be used
         coinsUsed = howManyCoins(changeRemaining, 25);
