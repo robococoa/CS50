@@ -87,68 +87,68 @@ bool checkSum(string cardNumber)
     while (card > 10)
     {
         digit = card % 10;
-        printf("card digit: %i\n", digit);
+        // printf("card digit: %i\n", digit);
         card /= 10;
         // Multiply every 2nd digit by 2, and add to a summation
         if (count % 2 == 0)
         {
-            printf("add this digit to sum.\n");
+            // printf("add this digit to sum.\n");
             multiplied = digit * 2;
-            printf("multiplied: %i\n", multiplied);
+            // printf("multiplied: %i\n", multiplied);
             // Separate the digits out if there's more than 1, before adding to the sum
             if (multiplied / 10 > 0)
             {
-                printf("value has more than 1 digit.\n");
+                // printf("value has more than 1 digit.\n");
                 int multipliedDigits = multiplied;
                 while (multipliedDigits > 9)
                 {
                     sumOfDigits += multiplied % 10;
-                    printf("sum of digits: %i\n", sumOfDigits);
+                    // printf("sum of digits: %i\n", sumOfDigits);
                     multipliedDigits /= 10;
                 }
                 sumOfDigits += multipliedDigits;
-                printf("sum of digits: %i\n", sumOfDigits);
+                // printf("sum of digits: %i\n", sumOfDigits);
             }
             // If there is only 1 digit, add it to the sum
             else
             {
                 sumOfDigits += multiplied;
-                printf("sum of digits: %i\n", sumOfDigits);
+                // printf("sum of digits: %i\n", sumOfDigits);
             }
         }
         // Keep a track of the sum of the alternate digits
         else
         {
             sumOfOtherDigits += digit;
-            printf("sum of other digits: %i\n", sumOfOtherDigits);
+            // printf("sum of other digits: %i\n", sumOfOtherDigits);
         }
         count++;
-        printf("count: %i\n", count);
-        printf("card: %li\n", card);
+        // printf("count: %i\n", count);
+        // printf("card: %li\n", card);
     }
-    printf("exited while loop\n");
+    // printf("exited while loop\n");
     // Add first digit to appropriate sum
     if (count % 2 == 0)
     {
         if (card == 5)
         {
             sumOfDigits++;
-            printf("sum of digits: %i\n", sumOfDigits);
+            // printf("sum of digits: %i\n", sumOfDigits);
         }
         else
         {
             sumOfDigits += card * 2;
-            printf("sum of digits: %i\n", sumOfDigits);
+            // printf("sum of digits: %i\n", sumOfDigits);
         }
     }
     else
     {
         sumOfOtherDigits += card;
-        printf("sum of other digits: %i\n", sumOfOtherDigits);
+        // printf("sum of other digits: %i\n", sumOfOtherDigits);
     }
     // Add the remaining digits from the card number to the summation
     sumOfDigits += sumOfOtherDigits;
-    printf("sum of digits and other digits: %i\n", sumOfDigits);
+    // printf("sum of digits and other digits: %i\n", sumOfDigits);
     // If the last digit is zero, it passes the checksum
     if (sumOfDigits % 10 == 0)
     {
