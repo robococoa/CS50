@@ -47,7 +47,7 @@ int main(void)
     // if number is 13 or 16, and starts with 4, continue with VIA checks
     else if (strncmp(cardNumber, "4", 1) == 0)
     {
-        printf("Checking if VISA\n");
+        // printf("Checking if VISA\n");
         if (length == 13 || length == 16)
         {
             if (checkSum(cardNumber))
