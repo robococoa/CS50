@@ -29,7 +29,11 @@ int main(void)
         }
     }
     // Check if the number is a Mastercard format
-    else if (strncmp(cardNumber, "51", 2) == 0 || strncmp(cardNumber, "52", 2) == 0 || strncmp(cardNumber, "53", 2) == 0 || strncmp(cardNumber, "54", 2) == 0 || strncmp(cardNumber, "55", 2) == 0)
+    else if (strncmp(cardNumber, "51", 2) == 0 ||
+             strncmp(cardNumber, "52", 2) == 0 ||
+             strncmp(cardNumber, "53", 2) == 0 ||
+             strncmp(cardNumber, "54", 2) == 0 ||
+             strncmp(cardNumber, "55", 2) == 0)
     {
         if (length == 16)
         {
