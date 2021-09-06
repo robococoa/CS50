@@ -1,0 +1,11 @@
+sort1 uses: Bubble sort
+
+How do you know?: The sorted data set time is much faster than its random and reversed, matching the omega(n) time being much faster (approximately a factor of 10) than its O(n2) time. It is also slower than sort 2 as the data set gets larger.
+
+sort2 uses: Merge sort
+
+How do you know?: The sorted times for random and reversed are much faster than sort1 and sort 2 as the data set gets larger, and these times are also relatively close to the time for the pre-sorted sort time which fits wiith the merge sort's matching O(n2) and Omega(n2) times.
+
+sort3 uses: Selection Sort
+
+How do you know?: The times for all 3 situations are the approximately the same, matching the O(n2) and Omega(n2) times. It is also slower than sort 2 as the data set gets larger.
