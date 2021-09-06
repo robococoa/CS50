@@ -53,9 +53,6 @@ int main(int argc, string argv[])
             printf("%c", input[i]);
         }
     }
-
-    //printf("Usage: ./caesar key");
-    // return 1;
     printf("\n");
 }
 
