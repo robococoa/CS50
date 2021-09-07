@@ -228,13 +228,16 @@ void lock_pairs(void)
 // Print the winner of the election
 void print_winner(void)
 {
-    // Winner has all false values in locked[]
+    int candidateLossCount[candidate_count];
+    int count = candidate_count;
+    // Winner has the lowest number of true values
     for (int i = 0; i < candidate_count; i++)
     {
         for (int j = 0; j < candidate_count; j++)
         {
             if (locked[i][j] == false)
             {
+                // Outright victory. Winner has all false values in locked[]
                 if (j == candidate_count - 1)
                 {
                     printf("%s\n", candidates[i]);
@@ -242,10 +245,24 @@ void print_winner(void)
             }
             else
             {
-                break;
+                candidateLossCount[i]++;
+            }
+        }
+        // If no outright winner, find candidates with the lowest losses
+        for (int k = 0; k < candidate_count; k++)
+        {
+            if (candidateLossCount[k] < count)
+            {
+                count = candidateLossCount[k];
+            }
+        }
+        for (int l = 0; l < candidate_count; l++)
+        {
+            if (candidateLossCount[l] == count)
+            {
+                printf("%s\n", candidates[l]);
             }
         }
     }
     return;
 }
-
