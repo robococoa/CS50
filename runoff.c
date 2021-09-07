@@ -201,7 +201,7 @@ bool is_tie(int min)
     // If any candidate's votes does not match the minimum vote count, there is no tie
     for (int i = 0; i < candidate_count; i++)
     {
-        if (candidates[i].votes != min)
+        if (candidates[i].votes != min && candidates[i].eliminated == false)
         {
             return false;
         }
