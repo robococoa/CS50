@@ -249,9 +249,12 @@ void lock_pairs(void)
                     {
                         // Do not update this, as it will close the cycle graph
                     }
+                    if (pairs[i].loser == candidateLosses[j])
+                    {
+                        locked[pairs[i].winner][pairs[i].loser] = true;
+                        candidateLosses[pairs[i].loser]++;
+                    }
                 }
-                locked[pairs[i].winner][pairs[i].loser] = true;
-                candidateLosses[pairs[i].loser]++;
             }
             else
             {
