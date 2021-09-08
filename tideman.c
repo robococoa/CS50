@@ -219,42 +219,38 @@ void lock_pairs(void)
 {
     for (int i = 0; i < pair_count; i++)
     {
+        // Each loser or pairs[i].loser is to be added to locked[] as being beaten by winner or pairs[i].winner, as true
+        if (i == 0)
+        {
+            locked[pairs[i].winner][pairs[i].loser] = true;
+        }
+
         int count = 0;
         // If there's at least 2 candidiates with all false, then a new one can be set to have a true value
-        if (count < candidate_count - 1)
+        // Check how many candidates have all false in locked[][] before adding a new one
+        if (i > 0)
         {
-            // Check how many candidates have all false in locked[][] before adding a new one
-            int wins = 0;
-            int y = 0;
-            for (int x = 0; x < candidate_count; x++)
-            {
-                if (locked[x][y] == true)
-                {
-                    break;
-                }
-                else
-                {
-                   wins++;
-                }
-                y++;
-            }
-            /*
-            for (int k = 0; k < candidate_count; k++)
-            {
-                for (int j = 0; j < candidate_count; j++)
-                {
-                    if (locked[k][j] == false)
-                    {
-                        // This candidate has all false, increase the number of candidiates with a true value
-                        if (j == candidate_count - 1)
-                        {
-                            count++;
-                        }
-                    }
-                }
-            }
-            */
             locked[pairs[i].winner][pairs[i].loser] = true;
+            if (count < candidate_count - 1)
+            {
+                /*
+                int wins = 0;
+                int y = 0;
+                for (int x = 0; x < candidate_count; x++)
+                {
+                    if (locked[x][y] == true)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                       wins++;
+                    }
+                    y++;
+
+                }*/
+            }
+            // If
         }
     }
     return;
