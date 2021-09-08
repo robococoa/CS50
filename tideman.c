@@ -160,7 +160,6 @@ void add_pairs(void)
         {
             int person1 = preferences[i][j + i];
             int person2 = preferences[j + i][i];
-            printf("person1: %s, value: %i, person2: %s, value: %i\n", candidates[i], person1, candidates[i + j], person2);
 
             if (person1 > person2)
             {
@@ -174,7 +173,6 @@ void add_pairs(void)
                 pairs[pair_count].loser = i;
                 pair_count++;
             }
-            printf("pair count: %i\n", pair_count);
             // else pairs is not updated if equal
         }
     }
@@ -194,13 +192,11 @@ void sort_pairs(void)
         if (i == 0)
         {
             firstPairStrength = (preferences[pairs[i].winner][pairs[i].loser]) - (preferences[pairs[i].loser][pairs[i].winner]);
-            printf("1st pair str: %i", firstPairStrength);
         }
         // Compare with next pair
         if (i > 0)
         {
             secondPairStrength = (preferences[pairs[i].winner][pairs[i].loser]) - (preferences[pairs[i].loser][pairs[i].winner]);
-            printf("2nd pair str: %i", secondPairStrength);
             // Swap pairs if out of descending order
             if (firstPairStrength < secondPairStrength)
             {
@@ -213,7 +209,6 @@ void sort_pairs(void)
             }
             // Reset firstPairStrength to current position
             firstPairStrength = secondPairStrength;
-            printf("1st pair str updated: %i", firstPairStrength);
         }
     }
     return;
@@ -222,27 +217,27 @@ void sort_pairs(void)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    int count = 0;
     for (int i = 0; i < pair_count; i++)
     {
-        // Check how many candidates have all false in locked[][]
-        for (int k = 0; k < candidate_count; k++)
+        int count = 0;
+        // If there's at least 2 candidiates with all false, then a new one can be set to have a true value
+        if (count < candidate_count - 1)
         {
-            for (int j = 0; j < candidate_count; j++)
+            // Check how many candidates have all false in locked[][] before adding a new one
+            for (int k = 0; k < candidate_count; k++)
             {
-                if (locked[k][j] == false)
+                for (int j = 0; j < candidate_count; j++)
                 {
-                    // This candidate has all false, increase the number of candidiates with a true value
-                    if (j == candidate_count - 1)
+                    if (locked[k][j] == false)
                     {
-                        count++;
+                        // This candidate has all false, increase the number of candidiates with a true value
+                        if (j == candidate_count - 1)
+                        {
+                            count++;
+                        }
                     }
                 }
             }
-        }
-        // If there's at least 2 candidiates with all false, then a new one can be set to have a true value
-        if (count < candidate_count - 2)
-        {
             locked[pairs[i].winner][pairs[i].loser] = true;
         }
     }
