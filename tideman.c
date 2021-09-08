@@ -215,12 +215,29 @@ void sort_pairs(void)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // Start assigning true values in locked[] for each edge, using pairs[]
+    int count = 0;
     for (int i = 0; i < pair_count; i++)
     {
-        // Set true if the candidate is not the last with all false
-
-        locked[pairs[i].winner][pairs[i].loser] = true;
+        // Check how many candidates have all false in locked[][]
+        for (int k = 0; k < candidate_count; k++)
+        {
+            for (int j = 0; j < candidate_count; j++)
+            {
+                if (locked[k][j] == false)
+                {
+                    // This candidate has all false, increase the number of candidiates with a true value
+                    if (j == candidate_count - 1)
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+        // If there's at least 2 candidiates with all false, then a new one can be set to have a true value
+        if (count < candidate_count - 2)
+        {
+            locked[pairs[i].winner][pairs[i].loser] = true;
+        }
     }
     return;
 }
