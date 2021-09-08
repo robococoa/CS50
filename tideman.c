@@ -269,7 +269,7 @@ void lock_pairs(void)
 // Print the winner of the election
 void print_winner(void)
 {
-    int candidateLossCount[candidate_count];
+    int candidateLossCount[MAX] = {0};
     int count = candidate_count;
 
     // Winner has the lowest number of true values
