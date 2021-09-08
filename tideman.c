@@ -260,6 +260,7 @@ void print_winner(void)
                 if (j == candidate_count - 1)
                 {
                     printf("%s\n", candidates[i]);
+                    return;
                 }
             }
             else
