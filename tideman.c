@@ -224,6 +224,21 @@ void lock_pairs(void)
         if (count < candidate_count - 1)
         {
             // Check how many candidates have all false in locked[][] before adding a new one
+            int wins = 0;
+            int y = 0;
+            for (int x = 0; x < candidate_count; x++)
+            {
+                if (locked[x][y] == true)
+                {
+                    break;
+                }
+                else
+                {
+                   wins++;
+                }
+                y++;
+            }
+            /*
             for (int k = 0; k < candidate_count; k++)
             {
                 for (int j = 0; j < candidate_count; j++)
@@ -238,6 +253,7 @@ void lock_pairs(void)
                     }
                 }
             }
+            */
             locked[pairs[i].winner][pairs[i].loser] = true;
         }
     }
@@ -253,10 +269,10 @@ void print_winner(void)
     // Winner has the lowest number of true values
 
     // Check for outright winner
+    int j = 0;
     for (int i = 0; i < candidate_count; i++)
     {
         int hasWonOutright = 0;
-        int j = 0;
         if (locked[i][j] == true)
         {
             candidateLossCount[i]++;
