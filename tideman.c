@@ -245,7 +245,7 @@ void lock_pairs(void)
                 // Check if the final open edge is the same as the new loser
                 for (int j = 0; j < candidate_count; j++)
                 {
-                    if (candidateLosses[j] == 0 && candidateLosses[j] == locked[pairs[i].winner][pairs[i].loser])
+                    if (candidateLosses[j] == 0 && candidateLosses[j] == pairs[i].loser)
                     {
                         // Do not update this, as it will close the cycle graph
                     }
