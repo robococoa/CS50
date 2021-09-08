@@ -125,13 +125,11 @@ void record_preferences(int ranks[])
         if (i == 0)
         {
             preferences[ranks[0]][ranks[0]] = 0;
-            printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
         }
         // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
         else
         {
             preferences[ranks[0]][ranks[i]]++;
-            printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
             arrLength = i;
         }
     }
@@ -144,7 +142,6 @@ void record_preferences(int ranks[])
         {
             remainingRanks[j] = ranks[j + 1];
         }
-        printf("arraylength: %i, new recursion loop\n", arrLength);
         // int size = sizeof(remainingRanks);
         record_preferences_recursive(remainingRanks, arrLength);
     }
@@ -163,19 +160,21 @@ void add_pairs(void)
         {
             int person1 = preferences[i][j + i];
             int person2 = preferences[j + i][i];
+            printf("person1: %s, value: %i, person2: %s, value: %i\n", candidates[i], person1, candidates[i + j], person2);
 
             if (person1 > person2)
             {
-                pairs[i].winner = i;
-                pairs[i].loser = j + 1;
+                pairs[pair_count].winner = i;
+                pairs[pair_count].loser = j + i;
                 pair_count++;
             }
             else if (person2 > person1)
             {
-                pairs[i].winner = j + 1;
-                pairs[i].loser = i;
+                pairs[pair_count].winner = j + i;
+                pairs[pair_count].loser = i;
                 pair_count++;
             }
+            printf("pair count: %i\n", pair_count);
             // else pairs is not updated if equal
         }
     }
@@ -195,11 +194,13 @@ void sort_pairs(void)
         if (i == 0)
         {
             firstPairStrength = (preferences[pairs[i].winner][pairs[i].loser]) - (preferences[pairs[i].loser][pairs[i].winner]);
+            printf("1st pair str: %i", firstPairStrength);
         }
         // Compare with next pair
         if (i > 0)
         {
             secondPairStrength = (preferences[pairs[i].winner][pairs[i].loser]) - (preferences[pairs[i].loser][pairs[i].winner]);
+            printf("2nd pair str: %i", secondPairStrength);
             // Swap pairs if out of descending order
             if (firstPairStrength < secondPairStrength)
             {
@@ -212,6 +213,7 @@ void sort_pairs(void)
             }
             // Reset firstPairStrength to current position
             firstPairStrength = secondPairStrength;
+            printf("1st pair str updated: %i", firstPairStrength);
         }
     }
     return;
@@ -305,13 +307,11 @@ void record_preferences_recursive(int ranks[], int size)
         if (i == 0)
         {
             preferences[ranks[0]][ranks[0]] = 0;
-            printf("# 1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
         }
         // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
         else
         {
             preferences[ranks[0]][ranks[i]]++;
-            printf("# preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
             remainingArrLength = i;
         }
     }
@@ -324,7 +324,6 @@ void record_preferences_recursive(int ranks[], int size)
         {
             remainingRanks[j] = ranks[j + 1];
         }
-        printf("# arraylength: %i, new recursion loop\n", remainingArrLength);
         // int length = sizeof(remainingRanks);
         record_preferences_recursive(remainingRanks, remainingArrLength);
     }
