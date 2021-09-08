@@ -128,12 +128,12 @@ void record_preferences(int ranks[])
         // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
         else
         {
-            preferences[ranks[0]][i]++;
+            preferences[ranks[0]][ranks[i]]++;
             arrLength = i;
         }
     }
     // Recursively iterate through the remaining ranks[], sending a reduced ranks[] as new input
-    // Create new ranks[] if another recursion can be performed, dropping off the 1st element
+    // Create new ranks[] if another recursion can be performed, using the current rank[] but dropping off the 1st element
     if (arrLength > 0)
     {
         int remainingRanks[arrLength];
