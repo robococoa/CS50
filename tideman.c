@@ -125,13 +125,13 @@ void record_preferences(int ranks[])
         if (i == 0)
         {
             preferences[ranks[0]][ranks[0]] = 0;
-            // printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
+            printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
         }
         // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
         else
         {
             preferences[ranks[0]][ranks[i]]++;
-            // printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
+            printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
             arrLength = i;
         }
     }
@@ -145,8 +145,8 @@ void record_preferences(int ranks[])
             remainingRanks[j] = ranks[j + 1];
         }
         printf("arraylength: %i, new recursion loop\n", arrLength);
-        int size = sizeof(remainingRanks);
-        record_preferences_recursive(remainingRanks, size);
+        // int size = sizeof(remainingRanks);
+        record_preferences_recursive(remainingRanks, arrLength);
     }
     return;
 }
@@ -305,13 +305,13 @@ void record_preferences_recursive(int ranks[], int size)
         if (i == 0)
         {
             preferences[ranks[0]][ranks[0]] = 0;
-            // printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
+            printf("# 1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
         }
         // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
         else
         {
             preferences[ranks[0]][ranks[i]]++;
-            // printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
+            printf("# preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
             remainingArrLength = i;
         }
     }
@@ -319,14 +319,14 @@ void record_preferences_recursive(int ranks[], int size)
     // Create new ranks[] if another recursion can be performed, using the current rank[] but dropping off the 1st element
     if (remainingArrLength > 0)
     {
-        int remainingRanks[arrLength];
-        for (int j = 0; j < arrLength; j++)
+        int remainingRanks[remainingArrLength];
+        for (int j = 0; j < remainingArrLength; j++)
         {
             remainingRanks[j] = ranks[j + 1];
         }
-        // printf("arraylength: %i, new recursion loop\n", arrLength);
-        int length = sizeof(remainingRanks);
-        record_preferences_recursive(remainingRanks, length);
+        printf("# arraylength: %i, new recursion loop\n", remainingArrLength);
+        // int length = sizeof(remainingRanks);
+        record_preferences_recursive(remainingRanks, remainingArrLength);
     }
     return;
 }
