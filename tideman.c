@@ -217,40 +217,44 @@ void sort_pairs(void)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
+    // Keep track of the number of true values for each candidate
+    int candidateLosses[candidate_count];
     for (int i = 0; i < pair_count; i++)
     {
         // Each loser or pairs[i].loser is to be added to locked[] as being beaten by winner or pairs[i].winner, as true
         if (i == 0)
         {
             locked[pairs[i].winner][pairs[i].loser] = true;
+            candidateLosses[pairs[i].loser]++;
         }
 
         int count = 0;
-        // If there's at least 2 candidiates with all false, then a new one can be set to have a true value
-        // Check how many candidates have all false in locked[][] before adding a new one
+        // If the loser is for the last candidate with no losses, skip
         if (i > 0)
         {
-            locked[pairs[i].winner][pairs[i].loser] = true;
-            if (count < candidate_count - 1)
+            for (int j = 0; j < candidate_count; j++)
             {
-                /*
-                int wins = 0;
-                int y = 0;
-                for (int x = 0; x < candidate_count; x++)
+                if (candidateLosses[j] > 0)
                 {
-                    if (locked[x][y] == true)
+                    count++;
+                }
+            }
+            // Check if the cycle could be completed
+            if (count > pair_count - 1)
+            {
+                // Check if the final open edge is the same as the new loser
+                for (int j = 0; j < candidate_count; j++)
+                {
+                    if (candidateLosses[j] == 0 && candidateLosses[j] == locked[pairs[i].winner][pairs[i].loser])
                     {
-                        break;
+                        // Do not update this, as it will close the cycle graph
                     }
                     else
                     {
-                       wins++;
+                        locked[pairs[i].winner][pairs[i].loser] = true;
                     }
-                    y++;
-
-                }*/
+                }
             }
-            // If
         }
     }
     return;
