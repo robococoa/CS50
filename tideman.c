@@ -218,7 +218,7 @@ void sort_pairs(void)
 void lock_pairs(void)
 {
     // Keep track of the number of true values for each candidate
-    int candidateLosses[candidate_count];
+    int candidateLosses[MAX] = {0};
     for (int i = 0; i < pair_count; i++)
     {
         // Each loser or pairs[i].loser is to be added to locked[] as being beaten by winner or pairs[i].winner, as true
@@ -240,7 +240,7 @@ void lock_pairs(void)
                 }
             }
             // Check if the cycle could be completed
-            if (count > pair_count - 1)
+            if (count == pair_count - 1)
             {
                 // Check if the final open edge is the same as the new loser
                 for (int j = 0; j < candidate_count; j++)
@@ -254,6 +254,10 @@ void lock_pairs(void)
                         locked[pairs[i].winner][pairs[i].loser] = true;
                     }
                 }
+            }
+            else
+            {
+                locked[pairs[i].winner][pairs[i].loser] = true;
             }
         }
     }
