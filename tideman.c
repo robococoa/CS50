@@ -252,12 +252,14 @@ void lock_pairs(void)
                     else
                     {
                         locked[pairs[i].winner][pairs[i].loser] = true;
+                        candidateLosses[pairs[i].loser]++;
                     }
                 }
             }
             else
             {
                 locked[pairs[i].winner][pairs[i].loser] = true;
+                candidateLosses[pairs[i].loser]++;
             }
         }
     }
