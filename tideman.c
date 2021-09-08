@@ -33,6 +33,7 @@ void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
+void record_preferences_recursive(int ranks[], int size);
 
 int main(int argc, string argv[])
 {
@@ -117,20 +118,20 @@ void record_preferences(int ranks[])
 {
     int arrLength = 0;
     // For the ith candidate in candidates[], being the ith candidate in preferences[], increment any candidate that is lower in ranks[i+n]
-    for (int i = 0; i < arrLength; i++)
+    for (int i = 0; i < candidate_count; i++)
     {
         // Determine ith candidate in ranks[] (ranks[i] is an int, which equals candidates[ranks[i]], which is the same position in preferences[ranks[i]])
         // Set 0 for the themself-themself pair (ie. ranks[i] where i = 0, in preferences[ranks[0]][ranks[0]] = 0)
         if (i == 0)
         {
             preferences[ranks[0]][ranks[0]] = 0;
-            printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
+            // printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
         }
         // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
         else
         {
             preferences[ranks[0]][ranks[i]]++;
-            printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
+            // printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
             arrLength = i;
         }
     }
@@ -144,7 +145,8 @@ void record_preferences(int ranks[])
             remainingRanks[j] = ranks[j + 1];
         }
         printf("arraylength: %i, new recursion loop\n", arrLength);
-        record_preferences(remainingRanks);
+        int size = sizeof(remainingRanks);
+        record_preferences_recursive(remainingRanks, size);
     }
     return;
 }
@@ -286,6 +288,45 @@ void print_winner(void)
                 printf("%s\n", candidates[l]);
             }
         }
+    }
+    return;
+}
+
+// Get the size of an array
+void record_preferences_recursive(int ranks[], int size)
+{
+    int arrLength = size;
+    int remainingArrLength = 0;
+    // For the ith candidate in candidates[], being the ith candidate in preferences[], increment any candidate that is lower in ranks[i+n]
+    for (int i = 0; i < arrLength; i++)
+    {
+        // Determine ith candidate in ranks[] (ranks[i] is an int, which equals candidates[ranks[i]], which is the same position in preferences[ranks[i]])
+        // Set 0 for the themself-themself pair (ie. ranks[i] where i = 0, in preferences[ranks[0]][ranks[0]] = 0)
+        if (i == 0)
+        {
+            preferences[ranks[0]][ranks[0]] = 0;
+            // printf("1st of new rank[], preferences[0][0]: %i\n", preferences[ranks[0]][ranks[0]]);
+        }
+        // For preferences[ranks[0]], iterate over the remainder of ranks[] and increment preferences[] for that candidate (preferences[ranks[i]][j])
+        else
+        {
+            preferences[ranks[0]][ranks[i]]++;
+            // printf("preferences[0][%i]: %i\n", i, preferences[ranks[0]][ranks[i]]);
+            remainingArrLength = i;
+        }
+    }
+    // Recursively iterate through the remaining ranks[], sending a reduced ranks[] as new input
+    // Create new ranks[] if another recursion can be performed, using the current rank[] but dropping off the 1st element
+    if (remainingArrLength > 0)
+    {
+        int remainingRanks[arrLength];
+        for (int j = 0; j < arrLength; j++)
+        {
+            remainingRanks[j] = ranks[j + 1];
+        }
+        // printf("arraylength: %i, new recursion loop\n", arrLength);
+        int length = sizeof(remainingRanks);
+        record_preferences_recursive(remainingRanks, length);
     }
     return;
 }
