@@ -249,24 +249,32 @@ void print_winner(void)
 {
     int candidateLossCount[candidate_count];
     int count = candidate_count;
+
     // Winner has the lowest number of true values
+
+    // Check for outright winner
     for (int i = 0; i < candidate_count; i++)
     {
-        for (int j = 0; j < candidate_count; j++)
+        int hasWonOutright = 0;
+        int j = 0;
+        if (locked[i][j] == true)
         {
-            if (locked[i][j] == false)
-            {
-                // Outright victory. Winner has all false values in locked[][]
-                if (j == candidate_count - 1)
-                {
-                    printf("%s\n", candidates[i]);
-                    return;
-                }
-            }
-            else
-            {
-                candidateLossCount[i]++;
-            }
+            candidateLossCount[i]++;
+        }
+        else
+        {
+            hasWonOutright++;
+        }
+        j++;
+
+        if (hasWonOutright == 3)
+        {
+            printf("%s\n", candidates[i]);
+            return;
+        }
+        else
+        {
+            hasWonOutright = 0;
         }
     }
     // If no outright winner, find candidates with the lowest losses
