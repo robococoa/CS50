@@ -134,7 +134,7 @@ void record_preferences(int ranks[])
     }
     // Recursively iterate through the remaining ranks[], sending a reduced ranks[] as new input
     // Create new ranks[] if another recursion can be performed, using the current rank[] but dropping off the 1st element
-    if (arrLength > 0)
+    if (arrLength > 1)
     {
         int remainingRanks[arrLength];
         for (int j = 0; j < arrLength; j++)
