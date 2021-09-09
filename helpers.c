@@ -44,6 +44,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             sepiaGreen = round(0.349 * image[i][j].rgbtRed + 0.686 * image[i][j].rgbtGreen + 0.168 * image[i][j].rgbtBlue);
             sepiaBlue = round(0.272 * image[i][j].rgbtRed + 0.534 * image[i][j].rgbtGreen + 0.131 * image[i][j].rgbtBlue);
 
+            // Set each channel to sepia value, if below 255, otherwise set to 255
             if (sepiaRed > 255)
             {
                image[i][j].rgbtRed = 255;
@@ -52,11 +53,22 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             {
                 image[i][j].rgbtRed = sepiaRed;
             }
-
-            // Set each channel to sepia value
-            image[i][j].rgbtRed = sepiaRed;
-            image[i][j].rgbtBlue = sepiaGreen;
-            image[i][j].rgbtGreen = sepiaBlue;
+            if (sepiaGreen > 255)
+            {
+                image[i][j].rgbtGreen = 255;
+            }
+            else
+            {
+                image[i][j].rgbtGreen = sepiaGreen;
+            }
+            if (sepiaBlue > 255)
+            {
+                image[i][j].rgbtBlue = 255;
+            }
+            else
+            {
+                image[i][j].rgbtBlue = sepiaBlue;
+            }
         }
     }
     return;
