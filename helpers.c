@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include "helpers.h"
 
+typedef struct
+{
+    BYTE  rgbtBlue;
+    BYTE  rgbtGreen;
+    BYTE  rgbtRed;
+}
+RGBTEMP;
+
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -77,6 +85,28 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
+    // Take in each row into a temp array stuct that matches RGBTRIPLE, write the tmp array values back into the row in reverse
+    RGBTEMP tmpArr[width];
+    for (int i = 0; i < height; i ++)
+    {
+        // Save row info into tmp array
+        for (int j = 0; j < width; j++)
+        {
+            tmpArr[j].rgbtRed = image[i][j].rgbtRed;
+            tmpArr[j].rgbtGreen = image[i][j].rgbtGreen;
+            tmpArr[j].rgbtBlue = image[i][j].rgbtBlue;
+        }
+        // Write tmp array info back into original row in reverse
+        int count = 1;
+        for (int k = 0; k < width; k++)
+        {
+            image[i][k].rgbtRed = tmpArr[width - count].rgbtRed;
+            //printf("image red: %i = opposite tmp red: %i", image[i][k - count].rgbtRed, tmpArr[k - 1].rgbtRed);
+            image[i][k].rgbtGreen = tmpArr[width - count].rgbtGreen;
+            image[i][k].rgbtBlue = tmpArr[width - count].rgbtBlue;
+            count++;
+        }
+    }
     return;
 }
 
