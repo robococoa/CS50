@@ -55,7 +55,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             // Set each channel to sepia value, if below 255, otherwise set to 255
             if (sepiaRed > 255)
             {
-               image[i][j].rgbtRed = 255;
+                image[i][j].rgbtRed = 255;
             }
             else
             {
@@ -101,7 +101,6 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
         for (int k = 0; k < width; k++)
         {
             image[i][k].rgbtRed = tmpArr[width - count].rgbtRed;
-            //printf("image red: %i = opposite tmp red: %i", image[i][k - count].rgbtRed, tmpArr[k - 1].rgbtRed);
             image[i][k].rgbtGreen = tmpArr[width - count].rgbtGreen;
             image[i][k].rgbtBlue = tmpArr[width - count].rgbtBlue;
             count++;
@@ -113,5 +112,101 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
+    // Create tmpArr[i][j] with all the blur values
+    RGBTEMP tmpArr[height][width];
+    for (int i = 0; i < height; i++)
+    {
+        // Calculations for each pixel centre
+        for (int j = 0; j < width; j++)
+        {
+            float count = 1.0; // Keep track of the number of valid adjacent pixels
+            int tmpRed = 0; // Keep track of sum of red pixels
+            int tmpGreen = 0; // Keep track of sum of green pixels
+            int tmpBlue = 0; // Keep track of sum of blue pixels
+
+            // Check top left
+            if (i - 1 >= 0 && j - 1 >= 0)
+            {
+                tmpRed += image[i - 1][j - 1].rgbtRed;
+                tmpGreen += image[i - 1][j - 1].rgbtGreen;
+                tmpBlue += image[i - 1][j - 1].rgbtBlue;
+                count++;
+            }
+            // Check top middle
+            if (i - 1 >= 0)
+            {
+                tmpRed += image[i - 1][j].rgbtRed;
+                tmpGreen += image[i - 1][j].rgbtGreen;
+                tmpBlue += image[i - 1][j].rgbtBlue;
+                count++;
+            }
+            // Check top right
+            if (i - 1 >= 0 && j + 1 < width)
+            {
+                tmpRed += image[i - 1][j + 1].rgbtRed;
+                tmpGreen += image[i - 1][j + 1].rgbtGreen;
+                tmpBlue += image[i - 1][j + 1].rgbtBlue;
+                count++;
+            }
+            // Check middle left
+            if (j - 1 >= 0)
+            {
+                tmpRed += image[i][j - 1].rgbtRed;
+                tmpGreen += image[i][j - 1].rgbtGreen;
+                tmpBlue += image[i][j - 1].rgbtBlue;
+                count++;
+            }
+            // Save middle middle
+            tmpRed += image[i][j].rgbtRed;
+            tmpGreen += image[i][j].rgbtGreen;
+            tmpBlue += image[i][j].rgbtBlue;
+            // Check middle right
+            if (j + 1 < width)
+            {
+                tmpRed += image[i][j + 1].rgbtRed;
+                tmpGreen += image[i][j + 1].rgbtGreen;
+                tmpBlue += image[i][j + 1].rgbtBlue;
+                count++;
+            }
+            // Check bottom left
+            if (i + 1 < height && j - 1 >= 0)
+            {
+                tmpRed += image[i + 1][j - 1].rgbtRed;
+                tmpGreen += image[i + 1][j - 1].rgbtGreen;
+                tmpBlue += image[i + 1][j - 1].rgbtBlue;
+                count++;
+            }
+            // Check bottom middle
+            if (i + 1 < height)
+            {
+                tmpRed += image[i + 1][j].rgbtRed;
+                tmpGreen += image[i + 1][j].rgbtGreen;
+                tmpBlue += image[i + 1][j].rgbtBlue;
+                count++;
+            }
+            // Check bottom right
+            if (i + 1 < height && j + 1 < width)
+            {
+                tmpRed += image[i + 1][j + 1].rgbtRed;
+                tmpGreen += image[i + 1][j + 1].rgbtGreen;
+                tmpBlue += image[i + 1][j + 1].rgbtBlue;
+                count++;
+            }
+            // Calculate average of each with number of valid values and save to the tmpArr
+            tmpArr[i][j].rgbtRed = round(tmpRed / count);
+            tmpArr[i][j].rgbtGreen = round(tmpGreen / count);
+            tmpArr[i][j].rgbtBlue = round(tmpBlue / count);
+        }
+    }
+    // Write over image[i][j] with values from tmpArr[i][i]
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            image[i][j].rgbtRed = tmpArr[i][j].rgbtRed;
+            image[i][j].rgbtGreen = tmpArr[i][j].rgbtGreen;
+            image[i][j].rgbtBlue = tmpArr[i][j].rgbtBlue;
+        }
+    }
     return;
 }
