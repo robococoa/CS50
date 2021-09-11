@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
             else if (isOpen == true)
             {
                 fclose(img);
-                //isOpen = false;
+
                 // Open new file with updated filename string
                 fopen(filename, "w");
                 if (img == NULL)
@@ -87,8 +87,11 @@ int main(int argc, char *argv[])
         }
         else
         {
-            // Write the buffer to the open file
-            fwrite(&buffer, sizeof(BYTE), BLOCK_SIZE, img);
+            if (isOpen == true)
+            {
+                // Write the buffer to the open file
+                fwrite(&buffer, sizeof(BYTE), BLOCK_SIZE, img);
+            }
         }
     }
     free(filename);
