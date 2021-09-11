@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
 
     while (fread(&buffer, sizeof(BYTE), BLOCK_SIZE, file))
     {
-
         if (checkIfJPEG(buffer))
         {
             // If a JPEG header is found, open a new output file if isOpen is false, and set isOpen to true
@@ -70,7 +69,7 @@ int main(int argc, char *argv[])
             else if (isOpen == true)
             {
                 fclose(img);
-                isOpen = false;
+                //isOpen = false;
                 // Open new file with updated filename string
                 fopen(filename, "w");
                 if (img == NULL)
@@ -92,6 +91,7 @@ int main(int argc, char *argv[])
             fwrite(&buffer, sizeof(BYTE), BLOCK_SIZE, img);
         }
     }
+    free(filename);
 }
 
 bool checkIfJPEG(BYTE buffer[])
