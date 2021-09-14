@@ -68,14 +68,17 @@ bool load(const char *dictionary)
 
     // Load each line of the dictionary until file end
     char word[64];
-    while(fscanf(file, "%s", word) != EOF)
+    while (fscanf(file, "%s", word) != EOF)
     {
         node *n = malloc(sizeof(node));
         if (n == NULL)
         {
             printf("Could not allocate memory for word.");
+            free(n);
             return false;
         }
+        // Ensure n->next is NULL
+        n->next = NULL;
         // Copy the dictionary word into the node
         strcpy(n->word, word);
         // Determine position in array from hash of word
@@ -89,6 +92,7 @@ bool load(const char *dictionary)
         {
             n->next = table[position];
             table[position] = n;
+
         }
         dictionarySize++;
     }
@@ -106,16 +110,20 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
 {
+    node *list = NULL;
+    node *tmp = NULL;
     // Cycle through table[]
     for (int i = 0; i < 26; i++)
     {
-        node *cursor = table[i];
-        while(cursor != NULL)
+        list = table[i];
+        while (list != NULL)
         {
-            node *tmp = cursor;
-            cursor = cursor->next;
-            free(tmp);
+            tmp = list->next;
+            free(list);
+            list = tmp;
         }
+
     }
+    free(list);
     return true;
 }
