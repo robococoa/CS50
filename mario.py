@@ -20,7 +20,5 @@ def pyramid(height, row):
     print(" " * row, end="")
     print("#" * height)
 
-    if __name__ == "__main__"
-
-
-main()
+if __name__ == "__main__":
+    main()
