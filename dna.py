@@ -38,14 +38,18 @@ def main():
             # Check if STR matches in sequence
             tmp = sequence[test:test + test_length]
     # Check for matching person, must match all values in counts{}
-    required_matches = len(count)
-    print(required_matches)
+    required_matches = len(counts)
     # Go through each count STR and then find that same STR in the database to compare values
-    for count in counts:
-        for person in database:
+    for person in database:
+        matches = 0
+        for count in counts:
             if int(person[count]) == counts[count]:
-                print(person["name"])
-                return
+                matches += 1
+                print(person, matches)
+                if matches == required_matches:
+                    print(person["name"])
+                    return
+    # If no person had an exact match across all STR values, end with no match found
     print("No match")
     return
 
