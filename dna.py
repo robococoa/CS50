@@ -45,7 +45,6 @@ def main():
         for count in counts:
             if int(person[count]) == counts[count]:
                 matches += 1
-                print(person, matches)
                 if matches == required_matches:
                     print(person["name"])
                     return
