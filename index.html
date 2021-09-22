@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+        <script>
+
+            // TODO: Add code to check answers to questions
+
+        </script>
+
+    </head>
+    <body>
+
+        <div class="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <h3>In cryptocurrency, which coin is known as the people's coin?</h3>
+                <!-- Multiple choice question-->
+                <button class = incorrect>Ethereum</button>
+                <button class = incorrect>Bitcoin</button>
+                <button class = correct>Dogecoin</button>
+                <button class = incorrect>SHIB</button>
+                <button class = incorrect>BCash</button>
+                <p id="button-message"></p>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+
+                <!-- Free response question -->
+                <h3>Where is crypto going?</h3>
+                <input autocomplete="off" placeholder="Type answer here" type="text">
+                <button id="check">Check Answer</button>
+                <p id="free-response-message"></p>
+            </div>
+
+        </div>
+        <script>
+            // Add event listener once the DOM has loaded
+            document.addEventListener('DOMContentLoaded', function() {
+
+                // Check for correct answer button interaction
+                let correct = document.querySelector('.correct');
+                correct.addEventListener('click', function() {
+                    correct.style.backgroundColor = 'green';
+                    document.querySelector('#button-message').innerHTML = 'Correct!';
+                });
+
+                // Check for incorrect answer button interaction
+                let incorrect = document.querySelectorAll('.incorrect');
+                for (let i = 0; i < incorrect.length; i++) {
+                    incorrect[i].addEventListener('click', function() {
+                        incorrect[i].style.backgroundColor = 'red';
+                        document.querySelector('#button-message').innerHTML = "Incorrect";
+                    });
+                }
+
+                // Free response question
+                //let checkButton = document.querySelector('#check');
+                document.querySelector('#check').addEventListener('click', function() {
+                    let inputAnswer = document.querySelector('input'.toLowerCase());
+                    if (inputAnswer.value == 'to the moon' || inputAnswer.value == 'the moon')
+                    {
+                        inputAnswer.style.backgroundColor = 'green';
+                        document.querySelector('#free-response-message').innerHTML = 'Correct!';
+                    }
+                    else
+                    {
+                        inputAnswer.style.backgroundColor = 'red';
+                        document.querySelector('#free-response-message').innerHTML = 'Inorrect';
+                    }
+
+                })
+            });
+
+
+        </script>
+    </body>
+</html>
