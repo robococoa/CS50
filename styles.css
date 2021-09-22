@@ -1,0 +1,32 @@
+.title-banner {
+    background-color: #fbc233;
+    color: #110c00;
+    margin-bottom: 2rem;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+body {
+    background-color: #110c00;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    text-align: left;
+}
+footer {
+    position: static;
+    top: 1000px;
+    font-size: small;
+    text-align: center;
+}
+.page-title {
+    font-size: 3rem;
+    text-align: center;
+}
+#link {
+    color: #fbc233;
+}
+.response {
+    color: #fbc233;
+}
