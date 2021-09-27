@@ -73,22 +73,29 @@ def buy():
 
     if request.method == "POST":
         symbol = request.form.get("symbol").upper()
-        # Check for valid shares
         shares = request.form.get("shares")
-        if shares < 0 or shares == 0 or type(shares) != int:
+
+        # Convert shares to an int, error if failure
+        try:
+            shares = int(shares)
+        except:
             return apology("invalid number of shares", 400)
-        print(f"**************************************** purchase {shares} share(s) of {symbol}")
+        if shares < 0 or shares == 0:
+            return apology("invalid number of shares", 400)
+
         # Calculate current purchase size
         result = lookup(symbol)
+        print(result)
+        # Check if a valid share symbol
         if result == None:
             return apology("stock not found", 400)
+
         name = result["name"]
         price = result["price"]
-        purchase_total = price * int(shares)
+        purchase_total = price * shares
         print(f"purchase total: {purchase_total}, for {name} @ {price}")
 
-        # Check if purchase is valid
-        # Set current user
+        # Check if purchase is valid for current user
         user_id = session["user_id"]
         print(f"current user id: {user_id}")
         # Check if there is enough cash
