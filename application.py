@@ -64,7 +64,6 @@ def buy():
         shares = request.form.get("shares")
         if shares is not > 0 or type(shares) != int:
             return apology("invalid number of shares", 400)
-        if shares
         print(f"**************************************** purchase {shares} share(s) of {symbol}")
         # Calculate current purchase size
         result = lookup(symbol)
