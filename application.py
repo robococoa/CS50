@@ -49,7 +49,19 @@ def index():
     # For the current username, generate table of the user's stocks
     user_id = session["user_id"]
     portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
-    return render_template("/index.html", portfolio=portfolio)
+
+    # Get user cash
+    user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
+    remaining_cash = user_cash[0]["cash"]
+
+    # Calculate total portfolio value
+    portfolio_stocks = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
+    total_stock_value = 0
+    for stock in portfolio_stocks:
+        total_stock_value += stock["total"]
+    portfolio_total = remaining_cash + total_stock_value
+
+    return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -61,7 +73,8 @@ def buy():
 
     if request.method == "POST":
         symbol = request.form.get("symbol").upper()
-        shares = request.form.get("shares")
+        # Check for valid shares
+        shares = int(request.form.get("shares"))
         if shares < 0 or shares == 0 or type(shares) != int:
             return apology("invalid number of shares", 400)
         print(f"**************************************** purchase {shares} share(s) of {symbol}")
@@ -93,10 +106,17 @@ def buy():
         # Update remaining cash
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
 
+        # Calculate total portfolio value
+        portfolio_stocks = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
+        total_stock_value = 0
+        for stock in portfolio_stocks:
+            total_stock_value += stock["total"]
+        portfolio_total = remaining_cash + total_stock_value
+
         # Return to index with successful purchase
         portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
         #new_purchase = True            new_purchase=new_purchase,
-        return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash)
+        return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
 
 @app.route("/history")

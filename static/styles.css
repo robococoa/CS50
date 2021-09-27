@@ -50,3 +50,8 @@ main img
 {
     font-weight: bold;
 }
+
+#stock-name
+{
+    text-align: left;
+}
