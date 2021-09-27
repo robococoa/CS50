@@ -160,7 +160,7 @@ def quote():
         # Call lookup to grab the stock data, otherwise send to an error page
         result = lookup(search)
         if result == None:
-            return apology("stock not found", 404)
+            return apology("stock not found", 400)
         name = result["name"]
         price = usd(result["price"])
         symbol = result["symbol"]
@@ -177,14 +177,14 @@ def register():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         # Ensure password1 and password2 was submitted
         elif not request.form.get("password"):
-            return apology("must provide both passwords", 403)
+            return apology("must provide both passwords", 400)
 
         elif not request.form.get("confirmation"):
-            return apology("must provide both passwords", 403)
+            return apology("must provide both passwords", 400)
 
         # Add hash value of password to database if both input passwords match, otherwise apologise for mismatched passwords
         password1 = request.form.get("password")
@@ -192,7 +192,7 @@ def register():
         password1_hash = generate_password_hash(request.form.get("password"))
         password2_hash = generate_password_hash(request.form.get("confirmation"))
         if not check_password_hash(password1_hash, password1) == check_password_hash(password2_hash, password2):
-            return apology("must provide matching passwords", 403)
+            return apology("must provide matching passwords", 400)
 
         # Add username to database if username does not exist
         username = request.form.get("username")
@@ -203,7 +203,7 @@ def register():
         for row in rows:
             print(f"{row['username']}")
             if row['username'] == username:
-                return apology("invalid username, username already exists", 403)
+                return apology("invalid username, username already exists", 400)
 
         # Username / pasword hash can be added to the database
         db.execute("INSERT INTO users(username, hash) VALUES (?, ?)", username, password1_hash)
