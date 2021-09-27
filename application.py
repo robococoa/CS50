@@ -62,11 +62,14 @@ def buy():
     if request.method == "POST":
         symbol = request.form.get("symbol").upper()
         shares = request.form.get("shares")
+        if shares is not > 0 or type(shares) != int:
+            return apology("invalid number of shares", 400)
+        if shares
         print(f"**************************************** purchase {shares} share(s) of {symbol}")
         # Calculate current purchase size
         result = lookup(symbol)
         if result == None:
-            return apology("stock not found", 403)
+            return apology("stock not found", 400)
         name = result["name"]
         price = result["price"]
         purchase_total = price * int(shares)
@@ -86,7 +89,7 @@ def buy():
         if cash > purchase_total or cash == purchase_total:
             db.execute("INSERT INTO portfolio(id, symbol, name, shares, price, total) VALUES (?, ?, ?, ?, ?, ?)", user_id, symbol, name, int(shares), price, purchase_total)
         else:
-            return apology("not enough cash to complete this transaction", 403)
+            return apology("not enough cash to complete this transaction", 400)
 
         # Update remaining cash
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
