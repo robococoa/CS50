@@ -74,7 +74,7 @@ def buy():
     if request.method == "POST":
         symbol = request.form.get("symbol").upper()
         # Check for valid shares
-        shares = int(request.form.get("shares"))
+        shares = request.form.get("shares")
         if shares < 0 or shares == 0 or type(shares) != int:
             return apology("invalid number of shares", 400)
         print(f"**************************************** purchase {shares} share(s) of {symbol}")
@@ -213,7 +213,9 @@ def register():
         password2 = request.form.get("confirmation")
         password1_hash = generate_password_hash(request.form.get("password"))
         password2_hash = generate_password_hash(request.form.get("confirmation"))
-        if not check_password_hash(password1_hash, password1) == check_password_hash(password2_hash, password2):
+        compare_p1_hash2 = check_password_hash(password2_hash, password1)
+        compare_p2_hash1 = check_password_hash(password1_hash, password2)
+        if compare_p1_hash2 == False and compare_p2_hash1 == False:
             return apology("must provide matching passwords", 400)
 
         # Add username to database if username does not exist
