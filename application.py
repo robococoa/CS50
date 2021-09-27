@@ -62,7 +62,7 @@ def buy():
     if request.method == "POST":
         symbol = request.form.get("symbol").upper()
         shares = request.form.get("shares")
-        if shares is not > 0 or type(shares) != int:
+        if shares < 0 or shares == 0 or type(shares) != int:
             return apology("invalid number of shares", 400)
         print(f"**************************************** purchase {shares} share(s) of {symbol}")
         # Calculate current purchase size
