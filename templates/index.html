@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr class="bold">
+                <td>Symbol</td>
+                <td>Name</td>
+                <td>Shares</td>
+                <td>Price</td>
+                <td>TOTAL</td>
+            <tr>
+        </thead>
+        <tbody>
+        {% for stock in portfolio %}
+            <tr>
+                <td>{{ stock.symbol }}</td>
+                <td id="stock-name">{{ stock.name }}</td>
+                <td>{{ stock.shares }}</td>
+                <td>{{ stock.price }}</td>
+                <td>{{ stock.total }}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td>CASH</td>
+                <td colspan="3" ></td>
+                <td>{{ remaining_cash }}</td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+                <td><b>{{ portfolio_total }}</b></td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Add cash to account</h2>
+    <form action="/" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="addCash" placeholder="Amount of cash to add" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Confirm Transaction</button>
+    </form>
+
+{% endblock %}
