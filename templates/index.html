@@ -21,20 +21,20 @@
                     <td>{{ purchase.symbol }}</td>
                     <td id="stock-name">{{ purchase.name }}</td>
                     <td>{{ purchase.shares }}</td>
-                    <td>{{ purchase.price }}</td>
-                    <td>{{ purchase.total }}</td>
+                    <td>${{ purchase.price }}</td>
+                    <td>${{ purchase.total }}</td>
                 </tr>
             </tbody>
         {% endfor %}
         <tr>
             <td>CASH</td>
             <td colspan="3" ></td>
-            <td>{{ remaining_cash }}</td>
+            <td>${{ remaining_cash }}</td>
         </tr>
         <tfoot>
             <tr>
                 <td colspan="4"></td>
-                <td><b>{{ portfolio_total }}</b></td>
+                <td><b>${{ portfolio_total }}</b></td>
             </tr>
         </tfoot>
     </table>

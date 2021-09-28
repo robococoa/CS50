@@ -52,14 +52,14 @@ def index():
 
     # Get user cash
     user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
-    remaining_cash = user_cash[0]["cash"]
+    remaining_cash = round(user_cash[0]["cash"], 2)
 
     # Calculate total portfolio value
     portfolio_stocks = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
     total_stock_value = 0
     for stock in portfolio_stocks:
         total_stock_value += stock["total"]
-    portfolio_total = remaining_cash + total_stock_value
+    portfolio_total = round(remaining_cash + total_stock_value, 2)
 
     return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
@@ -261,27 +261,55 @@ def sell():
     if request.method == "POST":
         symbol = request.form.get("symbol")
         shares = request.form.get("shares")
+        # Convert shares to an int, error if failure
+        try:
+            shares = int(shares)
+        except:
+            return apology("invalid number of shares", 400)
+        if shares < 0 or shares == 0:
+            return apology("invalid number of shares", 400)
+
         # Calculate current purchase size
         result = lookup(symbol)
         if result == None:
-            return apology("stock not found", 403)
+            return apology("stock not found", 400)
         name = result["name"]
         price = result["price"]
-        sell_total = price * int(shares)
-        print(f"purchase total: {sell_total}, for {name} @ {price}")
+        sell_total = price * shares
+        print(f"sell total: {sell_total}, for {name} @ {price}")
 
         # Check if enough stock is available to sell
-        stock_shares = db.execute("SELECT shares FROM portfolio WHERE id = ?", user_id)
-
+        stock_shares = db.execute("SELECT shares FROM portfolio WHERE id = ? and symbol = ?", user_id, symbol)
+        max_shares = int(stock_shares[0]["shares"])
+        if shares > max_shares:
+            return apology("invalid number of shares", 400)
+        print(f"stock_shares: {stock_shares}, max: {max_shares}")
+        remaining_shares = max_shares - shares
         # Get current cash
         user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
         cash = user_cash[0]["cash"]
-        remaining_cash = cash + sell_total
+        remaining_cash = round(cash + sell_total, 2)
+        print(f"cash: {cash}, remaining: {remaining_cash}")
 
-        # Update remaining cash
+        # Update remaining cash and shares
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
 
-    return redirect("/index.html")
+        # Remove symbol if no more shares
+        if remaining_shares > 0:
+            db.execute("UPDATE portfolio SET shares = ? WHERE id = ? and symbol = ?", remaining_shares, user_id, symbol)
+        else:
+            db.execute("DELETE FROM portfolio WHERE id = ? and symbol = ?", user_id, symbol)
+
+        # Populate index.html
+        portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
+        # Calculate total portfolio value
+        total_stock_value = 0
+        for stock in portfolio:
+            total_stock_value += stock["total"]
+        portfolio_total = round(remaining_cash + total_stock_value, 2)
+
+        # Return to index
+        return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
 
 def errorhandler(e):
