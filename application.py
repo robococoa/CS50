@@ -114,16 +114,15 @@ def buy():
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
 
         # Calculate total portfolio value
-        portfolio_stocks = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
+        portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
         total_stock_value = 0
-        for stock in portfolio_stocks:
+        for stock in portfolio:
             total_stock_value += stock["total"]
-        portfolio_total = remaining_cash + total_stock_value
+        portfolio_total = round(remaining_cash + total_stock_value, 2)
 
         # Return to index with successful purchase
-        portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
-        #new_purchase = True            new_purchase=new_purchase,
-        return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
+        #return redirect("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
+        return redirect("/")
 
 
 @app.route("/history")
@@ -309,7 +308,7 @@ def sell():
         portfolio_total = round(remaining_cash + total_stock_value, 2)
 
         # Return to index
-        return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
+        return redirect("/")
 
 
 def errorhandler(e):

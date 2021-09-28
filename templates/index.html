@@ -15,14 +15,14 @@
                 <td>TOTAL</td>
             <tr>
         </thead>
-        {% for purchase in portfolio %}
+        {% for stock in portfolio %}
             <tbody>
                 <tr>
-                    <td>{{ purchase.symbol }}</td>
-                    <td id="stock-name">{{ purchase.name }}</td>
-                    <td>{{ purchase.shares }}</td>
-                    <td>${{ purchase.price }}</td>
-                    <td>${{ purchase.total }}</td>
+                    <td>{{ stock.symbol }}</td>
+                    <td id="stock-name">{{ stock.name }}</td>
+                    <td>{{ stock.shares }}</td>
+                    <td>${{ stock.price }}</td>
+                    <td>${{ stock.total }}</td>
                 </tr>
             </tbody>
         {% endfor %}
