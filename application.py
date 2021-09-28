@@ -52,14 +52,19 @@ def index():
 
     # Get user cash
     user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
-    remaining_cash = round(user_cash[0]["cash"], 2)
+    remaining_cash_real = round(user_cash[0]["cash"], 2)
+    remaining_cash = usd(remaining_cash_real)
 
     # Calculate total portfolio value
-    portfolio_stocks = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
     total_stock_value = 0
-    for stock in portfolio_stocks:
+    for stock in portfolio:
         total_stock_value += stock["total"]
-    portfolio_total = round(remaining_cash + total_stock_value, 2)
+        # Convert portfolio values to usd for index display
+        stock["price"] = usd(stock["price"])
+        stock["total"] = usd(stock["total"])
+    portfolio_total_real = round(remaining_cash_real + total_stock_value, 2)
+    portfolio_total = usd(portfolio_total_real)
+
 
     return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
@@ -113,15 +118,7 @@ def buy():
         # Update remaining cash
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
 
-        # Calculate total portfolio value
-        portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
-        total_stock_value = 0
-        for stock in portfolio:
-            total_stock_value += stock["total"]
-        portfolio_total = round(remaining_cash + total_stock_value, 2)
-
         # Return to index with successful purchase
-        #return redirect("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
         return redirect("/")
 
 
@@ -298,14 +295,6 @@ def sell():
             db.execute("UPDATE portfolio SET shares = ? WHERE id = ? and symbol = ?", remaining_shares, user_id, symbol)
         else:
             db.execute("DELETE FROM portfolio WHERE id = ? and symbol = ?", user_id, symbol)
-
-        # Populate index.html
-        portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
-        # Calculate total portfolio value
-        total_stock_value = 0
-        for stock in portfolio:
-            total_stock_value += stock["total"]
-        portfolio_total = round(remaining_cash + total_stock_value, 2)
 
         # Return to index
         return redirect("/")
