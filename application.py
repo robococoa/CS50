@@ -92,7 +92,7 @@ def buy():
 
         name = result["name"]
         price = result["price"]
-        purchase_total = price * shares
+        purchase_total = round(price * shares, 2)
         print(f"purchase total: {purchase_total}, for {name} @ {price}")
 
         # Check if purchase is valid for current user
@@ -101,7 +101,7 @@ def buy():
         # Check if there is enough cash
         user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
         cash = user_cash[0]["cash"]
-        remaining_cash = cash - purchase_total
+        remaining_cash = round(cash - purchase_total, 2)
         print(f"user cash: {cash}, remaining: {remaining_cash}")
 
         # If not enough cash, go to apology
