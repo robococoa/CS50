@@ -87,6 +87,7 @@ def index():
 
         return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
+
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
