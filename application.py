@@ -42,31 +42,50 @@ if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     """Show portfolio of stocks"""
     # For the current username, generate table of the user's stocks
     user_id = session["user_id"]
-    portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
 
-    # Get user cash
-    user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
-    remaining_cash_real = round(user_cash[0]["cash"], 2)
-    remaining_cash = usd(remaining_cash_real)
+    if request.method == "POST":
+        cash_to_add = request.form.get("addCash")
 
-    # Calculate total portfolio value
-    total_stock_value = 0
-    for stock in portfolio:
-        total_stock_value += stock["total"]
-        # Convert portfolio values to usd for index display
-        stock["price"] = usd(stock["price"])
-        stock["total"] = usd(stock["total"])
-    portfolio_total_real = round(remaining_cash_real + total_stock_value, 2)
-    portfolio_total = usd(portfolio_total_real)
+        # Convert cash_to_add to an int, error if failure
+        try:
+            cash_to_add = int(cash_to_add)
+        except:
+            return apology("invalid cash value", 400)
+        if cash_to_add < 0 or cash_to_add == 0:
+            return apology("invalid cash value", 400)
 
-    return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
+        # Get current cash
+        user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
+        cash = user_cash[0]["cash"]
+        remaining_cash = round(cash + cash_to_add, 2)
 
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
+        return redirect("/")
+
+    if request.method == "GET":
+        portfolio = db.execute("SELECT * FROM portfolio WHERE id = ?", user_id)
+        # Get user cash
+        user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
+        remaining_cash_real = round(user_cash[0]["cash"], 2)
+        remaining_cash = usd(remaining_cash_real)
+
+        # Calculate total portfolio value
+        total_stock_value = 0
+        for stock in portfolio:
+            total_stock_value += stock["total"]
+            # Convert portfolio values to usd for index display
+            stock["price"] = usd(stock["price"])
+            stock["total"] = usd(stock["total"])
+        portfolio_total_real = round(remaining_cash_real + total_stock_value, 2)
+        portfolio_total = usd(portfolio_total_real)
+
+        return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
@@ -89,7 +108,6 @@ def buy():
 
         # Calculate current purchase size
         result = lookup(symbol)
-        print(result)
         # Check if a valid share symbol
         if result == None:
             return apology("stock not found", 400)
@@ -97,21 +115,21 @@ def buy():
         name = result["name"]
         price = result["price"]
         purchase_total = round(price * shares, 2)
-        print(f"purchase total: {purchase_total}, for {name} @ {price}")
 
         # Check if purchase is valid for current user
         user_id = session["user_id"]
-        print(f"current user id: {user_id}")
         # Check if there is enough cash
         user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
         cash = user_cash[0]["cash"]
         remaining_cash = round(cash - purchase_total, 2)
-        print(f"user cash: {cash}, remaining: {remaining_cash}")
 
         # If not enough cash, go to apology
         if cash > purchase_total or cash == purchase_total:
             db.execute("INSERT INTO portfolio(id, symbol, name, shares, price, total) VALUES (?, ?, ?, ?, ?, ?)",
-                       user_id, symbol, name, int(shares), price, purchase_total)
+                       user_id, symbol, name, shares, price, purchase_total)
+            # Update history
+            db.execute("INSERT INTO history(id, action, symbol, shares, price, total) VALUES (?, 'Bought', ?, ?, ?, ?)",
+                       user_id, symbol, shares, price, purchase_total)
         else:
             return apology("not enough cash to complete this transaction", 400)
 
@@ -126,7 +144,10 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    user_id = session["user_id"]
+
+    history = db.execute("SELECT * FROM history WHERE id = ?", user_id)
+    return render_template("/history.html", history=history)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -229,7 +250,6 @@ def register():
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
         # Check if username already exists
         for row in rows:
-            print(f"{row['username']}")
             if row['username'] == username:
                 return apology("invalid username, username already exists", 400)
 
@@ -271,20 +291,17 @@ def sell():
         name = result["name"]
         price = result["price"]
         sell_total = price * shares
-        print(f"sell total: {sell_total}, for {name} @ {price}")
 
         # Check if enough stock is available to sell
         stock_shares = db.execute("SELECT shares FROM portfolio WHERE id = ? and symbol = ?", user_id, symbol)
         max_shares = int(stock_shares[0]["shares"])
         if shares > max_shares:
             return apology("invalid number of shares", 400)
-        print(f"stock_shares: {stock_shares}, max: {max_shares}")
         remaining_shares = max_shares - shares
         # Get current cash
         user_cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
         cash = user_cash[0]["cash"]
         remaining_cash = round(cash + sell_total, 2)
-        print(f"cash: {cash}, remaining: {remaining_cash}")
 
         # Update remaining cash and shares
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, user_id)
@@ -294,7 +311,9 @@ def sell():
             db.execute("UPDATE portfolio SET shares = ? WHERE id = ? and symbol = ?", remaining_shares, user_id, symbol)
         else:
             db.execute("DELETE FROM portfolio WHERE id = ? and symbol = ?", user_id, symbol)
-
+        # Update history
+        db.execute("INSERT INTO history(id, action, symbol, shares, price, total) VALUES (?, 'Sold', ?, ?, ?, ?)",
+                   user_id, symbol, shares, price, sell_total)
         # Return to index
         return redirect("/")
 

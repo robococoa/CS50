@@ -15,27 +15,33 @@
                 <td>TOTAL</td>
             <tr>
         </thead>
+        <tbody>
         {% for stock in portfolio %}
-            <tbody>
-                <tr>
-                    <td>{{ stock.symbol }}</td>
-                    <td id="stock-name">{{ stock.name }}</td>
-                    <td>{{ stock.shares }}</td>
-                    <td>{{ stock.price }}</td>
-                    <td>{{ stock.total }}</td>
-                </tr>
-            </tbody>
+            <tr>
+                <td>{{ stock.symbol }}</td>
+                <td id="stock-name">{{ stock.name }}</td>
+                <td>{{ stock.shares }}</td>
+                <td>{{ stock.price }}</td>
+                <td>{{ stock.total }}</td>
+            </tr>
         {% endfor %}
-        <tr>
-            <td>CASH</td>
-            <td colspan="3" ></td>
-            <td>{{ remaining_cash }}</td>
-        </tr>
-        <tfoot>
+            <tr>
+                <td>CASH</td>
+                <td colspan="3" ></td>
+                <td>{{ remaining_cash }}</td>
+            </tr>
             <tr>
                 <td colspan="4"></td>
                 <td><b>{{ portfolio_total }}</b></td>
             </tr>
-        </tfoot>
+        </tbody>
     </table>
+    <h2>Add cash to account</h2>
+    <form action="/" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="addCash" placeholder="Amount of cash to add" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Confirm Transaction</button>
+    </form>
+
 {% endblock %}

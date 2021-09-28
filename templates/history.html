@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <h1>
+        Portfolio History
+    </h1>
+    <p>
+        In order of actions.
+    </p>
+    <table class="table table-striped">
+        {% for stock in history %}
+            <tbody>
+                <tr>
+                    <td>{{ stock.action }} {{ stock.shares }} of {{ stock.symbol }} at {{ stock.price }} for {{ stock.total }}</td>
+                </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}
