@@ -65,7 +65,6 @@ def index():
     portfolio_total_real = round(remaining_cash_real + total_stock_value, 2)
     portfolio_total = usd(portfolio_total_real)
 
-
     return render_template("/index.html", portfolio=portfolio, remaining_cash=remaining_cash, portfolio_total=portfolio_total)
 
 
@@ -111,7 +110,8 @@ def buy():
 
         # If not enough cash, go to apology
         if cash > purchase_total or cash == purchase_total:
-            db.execute("INSERT INTO portfolio(id, symbol, name, shares, price, total) VALUES (?, ?, ?, ?, ?, ?)", user_id, symbol, name, int(shares), price, purchase_total)
+            db.execute("INSERT INTO portfolio(id, symbol, name, shares, price, total) VALUES (?, ?, ?, ?, ?, ?)",
+                       user_id, symbol, name, int(shares), price, purchase_total)
         else:
             return apology("not enough cash to complete this transaction", 400)
 
@@ -194,6 +194,7 @@ def quote():
     if request.method == "GET":
         return render_template("/quote.html")
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -235,8 +236,6 @@ def register():
         # Username / pasword hash can be added to the database
         db.execute("INSERT INTO users(username, hash) VALUES (?, ?)", username, password1_hash)
         return redirect("/")
-
-
 
 
 @app.route("/sell", methods=["GET", "POST"])
