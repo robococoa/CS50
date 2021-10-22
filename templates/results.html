@@ -26,7 +26,7 @@
     <table class="table">
         <tbody>
             <tr>
-                <td class="left">Profit/Loss</td><td class="right">{{ "$%.2f" | format(hodl_gains) }}</td>
+                <td class="left">Profit/Loss</td><td class="right">${{ hodl_gains }}</td>
             </tr>
             <tr>
                 <td class="left">Return on investment (ROI)</td><td class="right">{{ hodl_change_percent }}%</td>
@@ -35,13 +35,13 @@
                 <td class="left">Average return per year</td><td class="right">{{ avg_return }}%</td>
             </tr>
             <tr>
-                <td class="left">Total Account Value</td><td class="right">{{ "$%.2f" | format(final_account_value) }} </td>
+                <td class="left">Total Account Value</td><td class="right">${{ final_account_value|round(2) }} </td>
             </tr>
             <tr>
-                <td class="left">Example taxable profit for stock held 12+ months (@50% of profit)</td><td class="right">{% if hodl_taxable > 0 %} {{ "$%.2f" | format(hodl_taxable) }} {% else %} $0.00 {% endif %}</td>
+                <td class="left">Example taxable profit for stock held 12+ months (@50% of profit)</td><td class="right">{% if hodl_taxable > 0 %} ${{ hodl_taxable|round(2) }} {% else %} $0.00 {% endif %}</td>
             </tr>
             <tr>
-                <td class="left">Example Total Account Value after Captial Gains Tax (@32.5% tax)</td><td class="right">{{ "$%.2f" | format(hodl_after_tax) }}</td>
+                <td class="left">Example Total Account Value after Captial Gains Tax (@32.5% tax)</td><td class="right">${{ hodl_after_tax|round(2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -53,7 +53,7 @@
     <table class="table">
         <tbody class="left">
             <tr>
-                <td class="left">Profit/Loss</td><td class="right">{{ "$%.2f" | format(dca_gains) }}</td>
+                <td class="left">Profit/Loss</td><td class="right">${{ dca_gains }}</td>
             </tr>
             <tr>
                 <td class="left">Return on investment (ROI)</td><td class="right">{{ dca_change_percent }}%</td>
@@ -62,13 +62,13 @@
                 <td class="left">Average return per year</td><td class="right">{{ dca_avg_return }}%</td>
             </tr>
             <tr>
-                <td class="left">Total Account Value</td><td class="right">{{ "$%.2f" | format(dca_end_value) }}</td>
+                <td class="left">Total Account Value</td><td class="right">${{ dca_end_value|round(2) }}</td>
             </tr>
             <tr>
-                <td class="left">Example taxable profit for stock held 12+ months (@50% of profit)</td><td class="right">{% if dca_taxable > 0 %} {{ "$%.2f" | format(dca_taxable) }} {% else %} $0.00 {% endif %}</td>
+                <td class="left">Example taxable profit for stock held 12+ months (@50% of profit)</td><td class="right">{% if dca_taxable > 0 %} ${{ dca_taxable|round(2) }} {% else %} $0.00 {% endif %}</td>
             </tr>
             <tr>
-                <td class="left">Example Total Account Value after Captial Gains Tax (@32.5% tax)</td><td class="right">{% if dca_taxable > 0 %} {{ "$%.2f" | format(dca_after_tax) }} {% else %} {{ dca_end_value }} {% endif %}</td>
+                <td class="left">Example Total Account Value after Captial Gains Tax (@32.5% tax)</td><td class="right">{% if dca_taxable > 0 %} ${{ dca_after_tax|round(2) }} {% else %} {{ dca_end_value }} {% endif %}</td>
             </tr>
         </tbody>
     </table>
@@ -83,7 +83,7 @@
                 <td class="left">Number of trades</td><td class="right">{{ trade_count }}</td>
             </tr>
             <tr>
-                <td class="left">Profit/Loss</td><td class="right">{{ "$%.2f" | format(trade_gains) }}</td>
+                <td class="left">Profit/Loss</td><td class="right">${{ trade_gains }}</td>
             </tr>
             <tr>
                 <td class="left">Return on investment (ROI)</td><td class="right">{{ trade_change_percent }}%</td>
@@ -92,13 +92,13 @@
                 <td class="left">Average return per year</td><td class="right">{{ trade_avg_return }}%</td>
             </tr>
             <tr>
-                <td class="left">Total Account Value</td><td class="right">{{ "$%.2f" | format(trade_final_account_value) }}</td>
+                <td class="left">Total Account Value</td><td class="right">${{ trade_final_account_value|round(2) }}</td>
             </tr>
             <tr>
-                <td class="left">Example taxable profit for stock held 12+ months (@50% of profit)</td><td class="right">{{ "$%.2f" | format(trade_gains) }}</td>
+                <td class="left">Example taxable profit for stock held 12+ months (@50% of profit)</td><td class="right">${{ trade_gains|round(2) }}</td>
             </tr>
             <tr>
-                <td class="left">Example Total Account Value after Captial Gains Tax (@32.5% tax)</td><td class="right">{{ "$%.2f" | format(trade_after_tax) }}</td>
+                <td class="left">Example Total Account Value after Captial Gains Tax (@32.5% tax)</td><td class="right">${{ trade_after_tax|round(2) }}</td>
             </tr>
         </tbody>
     </table>
