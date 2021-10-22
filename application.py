@@ -249,10 +249,11 @@ def get_dca_account_values(price, bank):
     buy_amount = bank / 12
     cash = bank - buy_amount
 
+    # Dollar-cost buying will occur on the 1st 12 months, out of 24 months
     length = len(price)
-    month = math.floor(length / 36) # 3 years for price results
+    month = math.floor(length / 36) # 3 years of price results
     i = math.floor(length / 3) # start account values after 1 year
-    months = [n for n in range(i, i * 2 - month, month)]
+    months = [n for n in range(i, i * 2, month)]    # contains the first 12 months
     positions = 0
 
     # Purchase the stock with buy_amount at the start of every month for 12 months
